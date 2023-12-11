@@ -246,7 +246,7 @@ Wie im Diagramm zu sehen ist, folgen daraus die Layers unsere Applikation:
 - **Visual Paradigm** (UML-Diagramm Editor)
 - **UMLet** (UML-Diagramm Editor)
 
-### 8.3 Plattform
+### 8.3 Platform
 - **Ubuntu Server** (MQTT-Broker und Agent)
 - **Desktop Environment** (Linux, MacOS, Windows)
 - **SonarQube** (statische Code-Analyse)
