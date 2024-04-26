@@ -12,7 +12,7 @@ Zusätzlich haben wir weitere Metriken, die über die Testabdeckung hinausgehen,
 
 Die folgenden Metriken sind Teil unseres Quality Gates und müssen von unserer Software erfüllt werden: 
 
-![Quality Gate von Sonarqube](pictures/testplan/quality-gate_sonarqube.png)
+![Quality Gate von Sonarqube](pictures/quality-gate_sonarqube.png)
 
 ## Welche automatischen Testwerkzeug werden genutzt?
 
@@ -28,7 +28,7 @@ Alle Testfälle werden vollautomatisch über eine CI/CD Pipeline ausgeführt, so
 
 Hier ein Beispiel für die Nachvollziehbarkeit, wenn ein Test fehlschlägt:
 
-![jenkins-logout](/pictures/testplan/jenkins-test-nachvollziehbarkeit.png)
+![jenkins-logout](/pictures/jenkins-test-nachvollziehbarkeit.png)
 
 ---
 
