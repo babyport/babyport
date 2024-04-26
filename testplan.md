@@ -40,7 +40,12 @@ Hier ein Beispiel für die Nachvollziehbarkeit, wenn ein Test fehlschlägt:
   - **\<Klassenname>IT.java**
 - Einzelne Test-Cases folgen der folgenden Konvention:
   - Testnamen: **\<Action>Should\<Expected Result>**
-  - z. B.: **dockerStateOnInitShouldBeCreated**
+    - z. B.: **dockerStateOnInitShouldBeCreated**
+  - Keine statischen Imports
+    - z.B.: anstelle von
+      -  Statisch: **when(command.noErrorOccurred()).thenReturn(false);** 
+      -  Nicht statisch: **Mockito.when(command.noErrorOccurred()).thenReturn(false);**
+    - Dies erhöht die Lesbarkeit und Wartbarkeit
   - Tests-Cases ab **15** Zeilen sollen zur besseren Lesbarkeit und Wartbarkeit unterteilt werden: 
     - Setup - Aufsetzen der Variablen
     - Action - Ausführen der notwendigen Aktionen
