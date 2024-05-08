@@ -28,7 +28,7 @@ Zusätzlich haben wir weitere Metriken, die über die Testabdeckung hinausgehen,
 
 Die folgenden Metriken sind Teil unseres Quality Gates und müssen von unserer Software erfüllt werden: 
 
-![Quality Gate von Sonarqube](pictures/quality-gate_sonarqube.png)
+![Quality Gate von Sonarqube](pictures/testplan/quality-gate_sonarqube.png)
 
 ## Welche automatischen Testwerkzeug werden genutzt?
 
@@ -44,7 +44,7 @@ Alle Testfälle werden vollautomatisch über eine CI/CD Pipeline ausgeführt, so
 
 Hier ein Beispiel für die Nachvollziehbarkeit, wenn ein Test fehlschlägt:
 
-![jenkins-logout](/pictures/jenkins-test-nachvollziehbarkeit.png)
+![jenkins-logout](/pictures/testplan/jenkins-test-nachvollziehbarkeit.png)
 
 ---
 
@@ -60,7 +60,7 @@ Hier ein Beispiel für die Nachvollziehbarkeit, wenn ein Test fehlschlägt:
     - Tests die Exceptions testen: **\<Action>ShouldThrow\<Expected Exception Name>Exception**
     - Generell folgen die Testnamen der Java üblichen **Camel Case** Namenskonvention für Methoden
   - Mindestens ein ``assert`` pro Testmethode
-  - Keine statischen Imports
+  - Keine statischen Importe, da wir nicht davon ausgehen wollen, dass alle Personen, die jemals am Projekt arbeiten werden, alle Frameworks genau kennen. Durch die Vermeidung von statischen Imports wird die Lesbarkeit für diese Personengruppen verbessert und somit das Onboarding erleichtert. 
     - z.B.: anstelle von
       -  Statisch: **when(command.noErrorOccurred()).thenReturn(false);** 
       -  Nicht statisch: **Mockito.when(command.noErrorOccurred()).thenReturn(false);**
