@@ -33,7 +33,7 @@ Darüber hinaus verbessert die Verwendung des Strategie-Pattern die Testbarkeit 
 
 Insgesamt stellt diese Lösung sicher, dass die Qualität und Testbarkeit des Codes verbessert wird, während gleichzeitig die SOLID-Prinzipien eingehalten und die Abhängigkeiten zwischen den verschiedenen Komponenten reduziert werden.
 
-<TBD UML Diagramm Agent>
+![Agent UML](pictures/UML/Klassendiagramm/Agent/MainEntwurAgentfV2.png)
 
 ## 2. Refactoring (Remove Reflections) [BabyPort-Agent]
 Dieses Refactoring dient dazu, eine Konstruktur direkt über Objektreferenzen statt über Reflexionen zu erhalten.
