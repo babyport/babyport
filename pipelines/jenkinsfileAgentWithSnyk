@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+    triggers {
+        cron('0 5 * * *')
+    }
+    environment {
+    	sonarLogin = credentials('sonar')
+    }
+    stages {
+        //Checks repository out to perform maven actions.
+        stage('Git Checkout') {
+            steps {
+                script {
+                    git branch: 'main',
+                        credentialsId: 'gitLogin',
+                        url: '<REPO-URL>'
+                }
+            }
+        }
+        //Performs all Junit tests before jar gets build.
+        stage('JUnit Tests') {
+            steps {
+                sh 'mvn test -f $WORKSPACE/pom.xml'
+            }
+
+        }
+        //Performs integration tests
+        stage('Integration Test') {
+            steps {
+                sh 'mvn verify -DskipUnitTests -f $WORKSPACE/pom.xml'
+            }
+        }
+        //Performs static code analysis with sonarqube hook
+        stage('Analyse') {
+            steps {
+                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=BabyPortAgent -Dsonar.host.url=<SONAR-URL> -Dsonar.token=$sonarLogin'
+                }
+        }
+        //Security check with Snyk
+        stage('Snyk') {
+            steps {    
+                snykSecurity(
+                    snykInstallation: 'babyportSnyk',
+                    snykTokenId: 'snyk-api-key',
+                )
+           }
+        }
+    }
+}

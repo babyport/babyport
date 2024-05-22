@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+    post {
+      failure {
+        updateGitlabCommitStatus name: 'build', state: 'failed'
+      }
+      success {
+        updateGitlabCommitStatus name: 'build', state: 'success'
+      }
+      aborted {
+        updateGitlabCommitStatus name: 'build', state: 'canceled'
+      }
+    }
+    options {
+      gitLabConnection('mygitlab')
+    }
+    triggers {
+        gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
+    }
+    environment {
+    	sonarLogin = credentials('sonar')
+    }
+    stages {
+        //Checks repository out to perform maven actions.
+        stage('Git Checkout') {
+            steps {
+                script {
+                    git branch: 'main',
+                        credentialsId: 'gitLogin',
+                        url: '<REPO-URL>'
+                }
+            }
+        }
+        //Builds the jar and skips the test because of previous pipeline step.
+        stage('Build Maven') {
+            steps {
+                sh 'mvn package -Dmaven.test.skip=true -f $WORKSPACE/babyport/pom.xml'
+            }
+        }
+        //Deploy build jar in Sandbox
+        stage('Deployment') {
+            steps {
+                sh 'scp $WORKSPACE/babyport/target/babyport-*-jar-with-dependencies.jar root@<IP>:/home/babyport/Desktop/BabyPort/babyport_server_client.jar'
+            }
+        }
+    }
+}

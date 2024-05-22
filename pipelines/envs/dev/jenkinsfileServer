@@ -1,0 +1,82 @@
+pipeline {
+    agent any
+    post {
+      failure {
+        updateGitlabCommitStatus name: 'build', state: 'failed'
+      }
+      success {
+        updateGitlabCommitStatus name: 'build', state: 'success'
+      }
+      aborted {
+        updateGitlabCommitStatus name: 'build', state: 'canceled'
+      }
+    }
+    options {
+      gitLabConnection('mygitlab')
+    }
+    triggers {
+        gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
+    }
+    environment {
+    	sonarLogin = credentials('sonar')
+    }
+    stages {
+        //Checks repository out to perform maven actions.
+        stage('Git Checkout') {
+            steps {
+                script {
+                    git branch: 'main',
+                        credentialsId: 'gitLogin',
+                        url: '<REPO-URL>'
+                }
+            }
+        }
+        //Performs all Junit tests before jar gets build.
+        stage('JUnit Tests') {
+            steps {
+                sh 'mvn test -f $WORKSPACE/babyport/pom.xml'
+            }
+
+        }
+        //Performs integration tests
+        stage('Integration Test') {
+            steps {
+                sh 'mvn verify -DskipUnitTests -f $WORKSPACE/babyport/pom.xml'
+            }
+        }
+        //Builds the jar and skips the test because of previous pipeline step.
+        stage('Build Maven') {
+            steps {
+                sh 'mvn package -Dmaven.test.skip=true -f $WORKSPACE/babyport/pom.xml'
+            }
+        }
+        //Performs static code analysis with sonarqube hook
+        stage('Analyse') {
+            steps {          
+                sh 'mvn clean verify sonar:sonar -f $WORKSPACE/babyport/pom.xml -Dsonar.projectKey=BabyPortServer -Dsonar.host.url=<SONAR-URL> -Dsonar.token=$sonarLogin'
+            }
+        }
+        //Deploy build jar in Sandbox
+        stage('Deployment') {
+            steps {
+                sh 'ssh root@<IP> \'systemctl stop babyport-server.service\''
+                sh 'scp $WORKSPACE/babyport/target/babyport-*-jar-with-dependencies.jar root@<IP>:/home/babyport/Desktop/BabyPort/Server/babyport_server_client.jar'
+                sh 'ssh root@<IP> \'chown -R babyport:babyport /home/babyport/Desktop/BabyPort/Server/\''
+                sh 'ssh root@<IP> \'systemctl start babyport-server.service\''
+            }
+        }
+        stage('Health probes') {
+            steps {
+                script {
+                    try {
+                        sh 'ssh root@<IP> \'systemctl is-active --quiet babyport-server.service\''
+                    }
+                    catch (exc) {
+                            //Ignore Error because startup gets interrupted because of X11 display
+                    }
+                }
+                build job: 'prod-BabyPort-Server'
+            }
+        }
+    }
+}

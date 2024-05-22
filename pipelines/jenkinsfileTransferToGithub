@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+    triggers {
+        gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
+    }
+    stages {
+        stage ('Cleanup')  {
+            steps{
+                sh 'rm -rf $WORKSPACE/github_upstream*'
+                sh 'rm -rf $WORKSPACE/babyport_documentation*'
+            }
+        }
+        //Checks repository out to perform maven actions.
+        stage('Checkout GitLab') {
+            steps {
+                dir ('babyport_documentation') {
+                    script {
+                        git branch: 'main',
+                            credentialsId: 'gitLogin',
+                            url: '<REPO-URL>'
+                    }
+                }
+            }
+        }
+        stage ('Checkout GitHub') {
+            steps {
+                sh 'mkdir $WORKSPACE/github_upstream'
+                sh 'git clone git@github.com:babyport/babyport.git $WORKSPACE/github_upstream'
+            }
+        }
+        stage('Copy') {
+            steps{
+                sh 'cp -R $WORKSPACE/babyport_documentation/github_upstream/* github_upstream/'
+            }
+        }
+        stage ('Push-Back') {
+            steps{            
+                dir('github_upstream') {
+                    sh 'git config --global user.name "BabyPort"'
+                    sh 'git config --global user.email "babyport@babyport.de"'
+                    sh 'git add *'
+                    sh 'git commit -m "docs(transferToGithub): :memo: Added new documentation via automated pipeline" || true'
+                    sh 'git push origin main --force'
+                }
+            }
+         }
+      
+    }
+}
