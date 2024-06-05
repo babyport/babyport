@@ -11,5 +11,8 @@ Enthalten sind:
 - Softwaremetriken
 - CI/CD Setup
 - Risk Management Table (RMMM)
-- Links zum Repository und Scrum Board
 - Projektretrospektive
+
+## Links
+
+- [Scrumboard](https://babyport.atlassian.net/jira/software/projects/BABYPORT/boards/1)
