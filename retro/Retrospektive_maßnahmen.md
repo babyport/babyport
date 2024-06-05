@@ -4,6 +4,8 @@
 
 Alle unsere Tasks müssen besser beschrieben werden, da die Teammitglieder nicht immer verstehen, was von Ihnen verlangt wird. Deshalb müssen die Erwartungen der Person, die den Task schreibt, genau definiert werden, und es müssen Abnahmekriterien definiert werden, die sicherstellen, dass klar ist, wann der Task abgeschlossen ist.
 
+Um die Tasks _besser_ zu beschreiben wird sich am [SMART](https://de.wikipedia.org/wiki/SMART_(Projektmanagement))-Konzept orientiert.
+
 Wir erwarten uns von dieser Maßnahme eine bessere Kommunikation zwischen den Teammitgliedern über die Aufgaben, so dass die Aufgaben klarer werden.
 
 ## 2. Maßnahme (Kommunikation)
