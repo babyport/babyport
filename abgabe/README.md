@@ -10,6 +10,6 @@ Enthalten sind:
 - Test Report
 - Softwaremetriken
 - CI/CD Setup
-- Aktualisierter Risk Management Table (RMMM)
+- Risk Management Table (RMMM)
 - Links zum Repository und Scrum Board
-- Zusammenfassung euerer Projektretrospektive
+- Projektretrospektive
