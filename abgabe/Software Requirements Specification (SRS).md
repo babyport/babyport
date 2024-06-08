@@ -106,9 +106,9 @@ Außerdem soll der Benutzer eine Schnittstelle entfernen können, wenn diese nic
 
 # 4. Unterstützende Informationen
 
-| BabyPort                            | Version 1.0      |
+| BabyPort                            | Version 1.2      |
 | ----------------------------------- | ---------------- |
-| Software Requirements Specification | Date: 28/10/2023 |
+| Software Requirements Specification | Date: 08/06/2024 |
 
 
 

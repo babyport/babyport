@@ -338,3 +338,12 @@ Dies erreichen wir mittels eines Quality Gates welches, die folgenden Parameter 
 
 ### Other Pipelines
 Neben der Standard-Pipeline, die durch Pushes und Merge Requests ausgelöst wird, werden auf beiden Projekten noch zwei weitere Pipelines zeitgesteuert gestartet. Zum einen läuft stündlich Renovate um sicherzustellen, dass alle Bibliotheken immer auf dem neuesten Stand sind und zum anderen läuft täglich ein Security Scan mittels Synk über die Komponenten.
+
+# 4. Unterstützende Informationen
+
+| BabyPort                            | Version 1.4      |
+| ----------------------------------- | ---------------- |
+| Software Architecture Document (SAD) | Date: 08/06/2024 |
+
+
+
