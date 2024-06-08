@@ -82,9 +82,6 @@ Aktivitätsdiagram:
 
 ![AktivityDiagram_EditContainer](/pictures/UML/ActivityDiagram/AktivityDiagram_EditContainer.png)
 
-### Disclaimer
-Aufgrund der aktuellen Implementierung ist es nicht möglich, einen Container nach dem Start zu editieren. Es ist zwar möglich, den Namen des Systemaccess-Points und den Broker, über den gesendet wird, zu ändern, nicht jedoch die Umgebungsvariablen, das Bild oder den Namen des Containers.
-
 ### 3.1.4 Containerinformationen anzeigen
 Damit der Benutzer seine Docker Container überwachen kann, soll es möglich sein, deren Logs und weitere Informationen über diese, anzuzeigen. Dies ist ebenfalls für Fehlerbehandlung sehr relevant, falls bei dem Containerstart oder während dem laufendem Betrieb ein Fehler unterlaufen ist.
 

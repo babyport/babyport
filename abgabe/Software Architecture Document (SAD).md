@@ -190,7 +190,8 @@ Hier sind die wichtigsten Operationen auf Container aufgelistet, bzgl. dessen, w
 <br>*6.3.1 Aktiviätsdiagramm für das Starten von Docker Containern*
 
 >![Activity-Diagram(Edit)](/pictures/UML/ActivityDiagram/AktivityDiagram_EditContainer.png) 
-<br>*6.3.2 Aktiviätsdiagramm für das Editieren von Docker Containern*
+<br>*6.3.2 Aktiviätsdiagramm für das Editieren von Docker Containern* <br> <br> <u>**Disclaimer:**</u>
+Aufgrund der aktuellen Implementierung ist es nicht möglich, einen Container nach dem Start zu editieren. Es ist zwar möglich, den Namen des Systemaccess-Points und den Broker, über den gesendet wird, zu ändern, nicht jedoch die >Umgebungsvariablen, das Bild oder den Namen des Containers.
 
 >![Activity-Diagram(Stop)](/pictures/UML/ActivityDiagram/AktivityDiagram_StopContainer.png) 
 <br>*6.3.3 Aktiviätsdiagramm für das Stoppen von Docker Containern*
