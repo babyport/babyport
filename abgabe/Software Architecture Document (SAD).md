@@ -65,7 +65,7 @@ Außerdem haben wir uns vorgenommen, weitere Prinzipien wie **KISS** und **DRY**
 Die Software `BabyPort` dient als Container-Management-System zur Verwaltung und Überwachung von Docker-Containern. `BabyPort` erreicht dies durch eine grafische Benutzeroberfläche, die verschiedene administrative Funktionen auf Docker Container abbildet.
 
 ### 3.1 Requirements
-1. **Containerverwaltung:** Dieses System verwaltet Container mithilfe einer Systemschnittstelle. Diese Schnittstelle wird vom Hauptsystem per `MQTT` angesteuert. Mit Hilfe dessen können verschiedene Container zur Überwachung hinzugefügt, entfernt, gestartet, gestoppt oder bearbeitet werden.
+1. **Containerverwaltung:** Dieses System verwaltet Container mithilfe einer Systemschnittstelle. Diese Schnittstelle wird vom Hauptsystem per `MQTT` angesteuert. Mit Hilfe dessen können verschiedene Container zur Überwachung hinzugefügt, entfernt, gestartet oder gestoppt werden.
 2. **Statusinformationen von Containern:** Hierbei werden die Daten aufbereitet und zum Monitoring dargestellt.
 
 ### 3.2 Goals (Server-Client)
@@ -92,11 +92,13 @@ Durch die Notwendigkeit, viele Events zwischen unabhänigen Kompoenten verwalten
 
 Der Agent nutzt das `Command Pattern` um eine einfache Erweiterbarkeit zu gewährleisten, da der Agent Docker Commands wrappen muss.
 
+Neben dem `Command Pattern` wird auch eine `Strategy` für die Ausführung verwendet, so dass neben den Commands auch verschiedene Ausführungspfade gewählt werden können.
+
 ## 4. Use-Case View
 In diesem Abschnitt werden die verschiedenen Anwendungsfälle dargestellt. Abschnitt 3.4 erläutert die Gründe für die Architekturentscheidungen, die auf der Grundlage der Use Cases getroffen wurden.
 
 ### 4.1 Use-Case Realizations
-Der Fokus dieser Implementierungsphase lag auf der Container Interaktion. Damit sind alle `CRUD-Operationen`, welche in dem Use Case Diagramm abgebildet sind, gemeint. Dabei lag ein großer Teil der Implementierung auf Seiten der UI. Zudem wurde an der Schnittstelle gearbeitet. Für die korrekte Umsetzung aller Use Cases ist jedoch eine Verbindung zwischen der Hauptapplikation und dem Agent erforderlich. Diese wurde zu großen Teilen fertiggestellt.
+Der Fokus dieser Implementierungsphase lag auf der Container Interaktion. Damit sind alle `CRUD-Operationen`, welche in dem Use Case Diagramm abgebildet sind, gemeint. Dabei lag ein großer Teil der Implementierung auf Seiten der UI. Zudem wurde an der Schnittstelle gearbeitet. Für die korrekte Umsetzung aller Use Cases ist jedoch eine Verbindung zwischen der Hauptapplikation und dem Agent erforderlich.
 
 >![Use Case Diagram](/pictures/UML/UseCaseDiagram.png)
 <br> *4.1.1 UseCase-Diagramm*
@@ -145,7 +147,7 @@ Wichtigste Klassen für die Funktionalität des Server-Clients:
 
 |  Package  | Erklärung | wichtige Methoden | wichtige Attribute |
 |:---|:---|:---|:---|
-| **MainUi.java** | Die `MainUi` fungiert als Event-Router, um alle möglichen Ui-Events der Subkomponenten zu bündeln und diese dann an den Controller zu versenden. | `initUi(): void` |  `selectedValue: IDisplayable` |
+| **MainUi.java** | Die `MainUi` fungiert als Event-Router, um alle möglichen UI-Events der Subkomponenten zu bündeln und diese dann an den Controller zu versenden. | `initUi(): void` |  `selectedValue: IDisplayable` |
 | **Controller.java** | Ist die Hauptkomponenten welche die Logik abbildet, um das Routing zwischen den einzelnen Klassen zu ermöglichen. | `processGUIEvent(e: GUIEvent): void` | `entityManager: ClientWrapperManager` |
 | **MQTTClientWrapper.java** | Handelt die `MQTT-Kommunikation` zwischen Server-Client und Agent und benachritigt den Controller bei Events. | `messageArrived(topic: String, mqttMessage: MqttMessage): void` | `systemAccessPoint: SystemAccessPoint`; `dockerContainer: DockerContainer`|
 
@@ -191,7 +193,7 @@ Hier sind die wichtigsten Operationen auf Container aufgelistet, bzgl. dessen, w
 
 >![Activity-Diagram(Edit)](/pictures/UML/ActivityDiagram/AktivityDiagram_EditContainer.png) 
 <br>*6.3.2 Aktiviätsdiagramm für das Editieren von Docker Containern* <br> <br> <u>**Disclaimer:**</u>
-Aufgrund der aktuellen Implementierung ist es nicht möglich, einen Container nach dem Start zu editieren. Es ist zwar möglich, den Namen des Systemaccess-Points und den Broker, über den gesendet wird, zu ändern, nicht jedoch die >Umgebungsvariablen, das Bild oder den Namen des Containers.
+Aufgrund der aktuellen Implementierung ist es nicht möglich, einen Container nach dem Start zu editieren. Es ist zwar möglich, den Namen des Systemaccess-Points und den Broker, über den gesendet wird, zu ändern, nicht jedoch die Umgebungsvariablen, das Bild oder den Namen des Containers.
 
 >![Activity-Diagram(Stop)](/pictures/UML/ActivityDiagram/AktivityDiagram_StopContainer.png) 
 <br>*6.3.3 Aktiviätsdiagramm für das Stoppen von Docker Containern*
@@ -220,7 +222,8 @@ graph LR;
     id3[MQTT-Schnittstelle]-- Schnittstelle zwischen Agent und Client (MQTT-Broker) ---id6[MQTT-Schnittstelle]
     id6[MQTT-Schnittstelle]-->id4[Agent]
     id4[Agent]-->id5[DockerCommand]
-    id5[DockerCommand]-->id7[Shell]
+    id5[DockerCommand] --> id8[Execution-Strategy]
+    id8[Execution-Strategy] -->id7[Shell]
 ```
 Wie im Diagramm zu sehen ist, folgen daraus die Layers unsere Applikation:
 1. **GUI** (Server-Client)
@@ -229,7 +232,8 @@ Wie im Diagramm zu sehen ist, folgen daraus die Layers unsere Applikation:
 4. **MQTT-Broker**
 5. **MQTT-Schnittstelle** (Agent)
 6. **Docker-Command** (Agent)
-7. **Shell** (Docker Binary von Linux/Windows) (Agent)
+7. **Execution-Strategy** (Agent)
+8. **Shell** (Docker Binary von Linux/Windows) (Agent)
 
 ### 8.2 Software Tools
 - **Java** (Sprache)
@@ -335,13 +339,14 @@ Dies erreichen wir mittels eines Quality Gates welches, die folgenden Parameter 
 | **Duplizierter Code** | kleiner als | 3% |
 | **Zuverlässigkeits Rating** | gleich | 0 erkannte Bugs |
 | **Security Rating** | gleich | 0 erkannte Schwachstellen |
+>Da nur ein Auszug der Parameter -> siehe [SonarQube-QualityGate](./Qualitätsberichte/Metriken.md)
 
 ### Other Pipelines
 Neben der Standard-Pipeline, die durch Pushes und Merge Requests ausgelöst wird, werden auf beiden Projekten noch zwei weitere Pipelines zeitgesteuert gestartet. Zum einen läuft stündlich Renovate um sicherzustellen, dass alle Bibliotheken immer auf dem neuesten Stand sind und zum anderen läuft täglich ein Security Scan mittels Synk über die Komponenten.
 
 # 4. Unterstützende Informationen
 
-| BabyPort                            | Version 1.4      |
+| BabyPort                            | Version 1.5      |
 | ----------------------------------- | ---------------- |
 | Software Architecture Document (SAD) | Date: 08/06/2024 |
 
