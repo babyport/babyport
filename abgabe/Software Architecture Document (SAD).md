@@ -265,9 +265,9 @@ Wie im Diagramm zu sehen ist, folgen daraus die Layers unsere Applikation:
 
 In diesem Abschnitt werden alle verwendeten Bibliotheken nach Komponente, Bibliothek und Zweck aufgelistet.
 
-|  Bibliotheken  |   Server-Client   |  Agent (Sidecar)  |                                                                         Zweck                                                                        |   |
-|:------------:|:-----------------:|:-----------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------:|---|
-| |     Jackson      |      Jackson      |                               Bibliothek zur Erzeugung verschiedener Dateien auf der Basis von Objekten (Object-Mapper)                              |
+|  Bibliotheken  |   Server-Client   |  Agent (Sidecar)  |                                                                         Zweck                                                                      |
+|:------------:|:-----------------:|:-----------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------:|
+| |     Jackson      |      Jackson      |                               Bibliothek zur Erzeugung verschiedener Dateien auf der Basis von Objekten (Object-Mapper)                                            |
 |              |    Eclipse Paho   |    Eclipse Paho   | Bibliothek für die Maschine-zu-Maschine-Kommunikation. In unserem Fall verwenden wir es für die MQTT-Kommunikation zwischen Server-Client und Agent. |
 |              |        -/-        |       Args4J      |                                       Bibliothek für die Übergabe von Argumenten über Kommandozeilenparameter.                                       |
 |              |      FlatLaf      |        -/-        |                                             Bibliothek zum verbesserten Theming von Swing UI Komponenten.                                            |
